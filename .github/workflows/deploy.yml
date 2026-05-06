@@ -52,14 +52,16 @@ jobs:
           REMOTE_USER: ${{ secrets.SERVER_USER }}
           REMOTE_PATH: ${{ secrets.REMOTE_PATH }}
         run: |
-          # SSH 폴더 생성 및 비밀키 저장
           mkdir -p ~/.ssh
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          # 비밀키를 파일로 저장 (가장 안전한 방식)
+          cat <<EOF > ~/.ssh/id_ed25519
+          $SSH_PRIVATE_KEY
+          EOF
+          
           chmod 600 ~/.ssh/id_ed25519
           
-          # SSH 접속 테스트 및 rsync 전송
-          # -o StrictHostKeyChecking=no 옵션으로 알려지지 않은 호스트 에러 방지
+          # rsync 전송 (-v 옵션 추가하여 상세 로그 확인)
           rsync -avz --delete \
-            -e "ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_ed25519" \
+            -e "ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_ed25519" \
             ./out/ \
             $REMOTE_USER@$REMOTE_HOST:$REMOTE_PATH
