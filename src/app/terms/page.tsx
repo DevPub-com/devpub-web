@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import LogoMark from "@/components/shared/LogoMark";
 import { COMPANY } from "@/constants/company";
 
 export const metadata: Metadata = {
@@ -17,9 +18,7 @@ export default function TermsPage() {
             className="flex items-center gap-3 group"
             id="terms-header-logo"
           >
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-accent">
-              <span className="text-base font-bold text-white">D</span>
-            </div>
+            <LogoMark className="h-9 w-9 text-primary" />
             <span className="text-lg font-bold text-foreground">
               {COMPANY.name}
             </span>

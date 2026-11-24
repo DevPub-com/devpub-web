@@ -1,5 +1,7 @@
 import Link from "next/link";
+import LogoMark from "@/components/shared/LogoMark";
 import { COMPANY } from "@/constants/company";
+import { PRODUCTS } from "@/constants/products";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -11,9 +13,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="md:col-span-2">
             <Link href="/" className="inline-flex items-center gap-3 group">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-accent">
-                <span className="text-base font-bold text-white">D</span>
-              </div>
+              <LogoMark className="h-9 w-9 text-primary" />
               <span className="text-lg font-bold text-foreground">
                 {COMPANY.name}
               </span>
@@ -25,38 +25,49 @@ export default function Footer() {
             {/* 통신판매업 심사용 사업자 정보 */}
             <div className="mt-8 space-y-1.5 text-xs text-muted-foreground">
               <p>
-                <span className="text-zinc-500">상호명</span>{" "}
+                <span className="text-foreground">상호명</span>{" "}
                 {COMPANY.legalName}
               </p>
               <p>
-                <span className="text-zinc-500">대표자</span>{" "}
+                <span className="text-foreground">대표자</span>{" "}
                 {COMPANY.representative}
               </p>
               <p>
-                <span className="text-zinc-500">사업장 소재지</span>{" "}
+                <span className="text-foreground">사업장 소재지</span>{" "}
                 {COMPANY.address}
               </p>
               <p>
-                <span className="text-zinc-500">사업자등록번호</span>{" "}
+                <span className="text-foreground">사업자등록번호</span>{" "}
                 {COMPANY.businessRegistrationNumber}
               </p>
               <p>
-                <span className="text-zinc-500">통신판매업신고번호</span>{" "}
+                <span className="text-foreground">통신판매업신고번호</span>{" "}
                 {COMPANY.mailOrderRegistrationNumber}
               </p>
               <p>
-                <span className="text-zinc-500">개인정보보호책임자</span>{" "}
-                {COMPANY.privacyOfficer}
-              </p>
-              <p>
-                                <span className="text-zinc-500">이메일</span>{" "}
+                <span className="text-foreground">이메일</span>{" "}
                 {COMPANY.email}
               </p>
             </div>
           </div>
 
-          {/* Legal links */}
+          {/* Service and legal links */}
           <div>
+            <div className="mb-10">
+              <h3 className="text-sm font-semibold text-foreground">자체 서비스</h3>
+              <ul className="mt-4 space-y-3">
+                {PRODUCTS.map((product) => (
+                  <li key={product.name}>
+                    <Link
+                      href={product.url ?? "/#products"}
+                      className="text-sm text-muted transition-colors duration-200 hover:text-primary-lighter"
+                    >
+                      {product.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
             <h3 className="text-sm font-semibold text-foreground">법적 고지</h3>
             <ul className="mt-4 space-y-3">
               <li>
@@ -83,20 +94,6 @@ export default function Footer() {
           <p className="text-xs text-muted-foreground">
             © {currentYear} {COMPANY.nameKorean}. All rights reserved.
           </p>
-          <div className="flex gap-6">
-            <Link
-              href="/terms"
-              className="text-xs text-muted-foreground transition-colors duration-200 hover:text-muted"
-            >
-              이용약관
-            </Link>
-            <Link
-              href="/privacy"
-              className="text-xs text-muted-foreground transition-colors duration-200 hover:text-muted"
-            >
-              개인정보처리방침
-            </Link>
-          </div>
         </div>
       </div>
     </footer>

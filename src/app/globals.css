@@ -3,125 +3,223 @@
 /* ── Design tokens ──────────────────────────────────────── */
 
 :root {
-  --background:      #07080e;
-  --foreground:      #eeeef6;
+  --background:      #f3f5fb;
+  --foreground:      #0c1433;
 
-  --surface:         #0c0d16;
-  --surface-hover:   #12131e;
-  --surface-border:  #1a1c2a;
+  --surface:         #ffffff;
+  --surface-border:  #cfd7ea;
 
-  --muted:           #7070a0;
-  --muted-foreground:#48487a;
+  --muted:           #465074;
+  --muted-foreground:#5a6588;
 
-  --primary:         #3466f6;
-  --primary-light:   #5882f8;
-  --primary-lighter: #8aaafb;
-  --primary-foreground: #ffffff;
-
-  --accent:          #f97316;
-  --accent-light:    #fb923c;
+  --primary:         #122344;
+  --primary-lighter: #2c4f94;
+  --on-primary:      #cbd5e8;
 }
 
 @theme inline {
   --color-background:        var(--background);
   --color-foreground:        var(--foreground);
   --color-surface:           var(--surface);
-  --color-surface-hover:     var(--surface-hover);
   --color-surface-border:    var(--surface-border);
   --color-muted:             var(--muted);
   --color-muted-foreground:  var(--muted-foreground);
   --color-primary:           var(--primary);
-  --color-primary-light:     var(--primary-light);
   --color-primary-lighter:   var(--primary-lighter);
-  --color-primary-foreground:var(--primary-foreground);
-  --color-accent:            var(--accent);
-  --color-accent-light:      var(--accent-light);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-on-primary:        var(--on-primary);
+  --font-sans: var(--font-plex-kr);
 }
 
-/* ── Reset / base ───────────────────────────────────────── */
-
-*, *::before, *::after { box-sizing: border-box; }
-
-* {
-  scrollbar-width: thin;
-  scrollbar-color: var(--surface-border) transparent;
-}
-
-html { scroll-behavior: smooth; }
+/* ── Base ───────────────────────────────────────────────── */
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
-  overflow-x: hidden;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
 }
 
-::selection {
-  background: rgba(52, 102, 246, 0.32);
-  color: var(--foreground);
+h1, h2, h3 { text-wrap: balance; }
+
+:focus-visible {
+  outline: 3px solid var(--foreground);
+  outline-offset: 3px;
 }
 
-/* ── Grid background ────────────────────────────────────── */
-
-.grid-bg {
-  background-image:
-    linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
-  background-size: 72px 72px;
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
 }
 
-/* ── Gradient text ──────────────────────────────────────── */
+/* ── Hero: server buttons ───────────────────────────────── */
 
-.gradient-text {
-  background: linear-gradient(135deg, var(--primary), var(--accent));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.server {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 2.25rem;
+  padding-inline: 0.75rem;
+  overflow: clip;
+  border: 1.5px solid transparent;
+  border-radius: 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  transition: background-color 0.3s, border-color 0.3s, color 0.3s;
 }
 
-/* ── Scroll reveal ──────────────────────────────────────── */
+.server-on   { background: #fff; color: var(--primary); cursor: pointer; }
+.server-boot { border: 1.5px dashed #fff; }
+.server-down { background: #ffa15c; color: #3d1700; }
+.server-off  { border: 1.5px dashed rgb(255 255 255 / 0.4); color: var(--on-primary); }
+.server:not(.server-on) { cursor: default; }
+header.bg-primary :focus-visible,
+#hero :focus-visible { outline-color: #fff; }
 
-.reveal {
+.server-load {
+  position: absolute;
+  inset: auto 0 0;
+  height: 4px;
+  background: var(--primary);
+  transform-origin: left;
+
+  @media (prefers-reduced-motion: no-preference) {
+    transition: transform 0.4s ease-out;
+  }
+}
+
+.server-hint {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: #ffa15c;
+  color: #3d1700;
   opacity: 0;
-  transform: translateY(28px);
-  transition:
-    opacity  0.8s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.15s;
 }
 
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
+.server:focus-visible .server-hint { opacity: 1; }
+@media (hover: hover) and (pointer: fine) {
+  .server:hover .server-hint { opacity: 1; }
 }
 
-/* ── Animations ─────────────────────────────────────────── */
+.traffic-range {
+  appearance: none;
+  width: 100%;
+  height: 2.75rem;
+  background: linear-gradient(rgb(255 255 255 / 0.45) 0 0) center / 100% 4px no-repeat;
+  cursor: grab;
 
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+  &:active { cursor: grabbing; }
+  &::-webkit-slider-thumb {
+    appearance: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #fff;
+  }
+  &::-moz-range-thumb {
+    width: 28px;
+    height: 28px;
+    border: 0;
+    border-radius: 50%;
+    background: #fff;
+  }
 }
 
-.animate-marquee {
-  animation: marquee 30s linear infinite;
-  will-change: transform;
+/* ── Services: exploded product stack ───────────────────── */
+
+.stack {
+  --size: 120px;
+  position: relative;
+  width: var(--size);
+  height: var(--size);
+  transform: rotateX(58deg) rotateZ(-45deg);
+  transform-style: preserve-3d;
 }
 
-@keyframes float-slow {
-  0%, 100% { transform: translateY(0) translateX(0); }
-  40%       { transform: translateY(-22px) translateX(10px); }
-  70%       { transform: translateY(-10px) translateX(-8px); }
+@media (min-width: 64rem) {
+  .stack { --size: min(24vw, 36svh, 320px); }
 }
 
-.animate-float-slow { animation: float-slow 14s ease-in-out infinite; }
+.stack-layer {
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--primary);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--primary);
+  transform: translateZ(calc((var(--level) * 0.27 + var(--lift) * 0.62) * var(--size)));
 
-/* ── Section spacing ────────────────────────────────────── */
+  svg {
+    width: 100%;
+    height: 100%;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
 
-.section-padding {
-  padding-block: 7rem;
-  padding-inline: 1.5rem;
+  &[data-active="true"] {
+    background: var(--primary);
+    color: #fff;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    transition:
+      transform 0.6s cubic-bezier(0.2, 0.9, 0.25, 1),
+      background-color 0.4s,
+      color 0.4s;
+  }
 }
 
-@media (min-width: 768px)  { .section-padding { padding-block: 9rem; } }
-@media (min-width: 1024px) { .section-padding { padding-block: 11rem; } }
+/* ── Contact: inline selects ────────────────────────────── */
+
+.inquiry-select {
+  appearance: none;
+  field-sizing: content;
+  max-width: 100%;
+  padding-block: 0.3em;
+  padding-inline-end: 1.1em;
+  border-bottom: 2px solid var(--primary-lighter);
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%232c4f94' stroke-width='2.5'%3E%3Cpath d='m3 6 5 5 5-5'/%3E%3C/svg%3E")
+    no-repeat right 0.1em center / 0.65em;
+  color: var(--primary-lighter);
+  line-height: 1.3;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  option { font-size: 0.9375rem; font-weight: 400; color: var(--foreground); }
+  &:hover { background-color: var(--background); }
+}
+
+/* OS 기본 목록은 셀렉트 글자 크기로 열려 커진다. 터치 기기는 기본 선택기를 그대로 쓴다. */
+@supports (appearance: base-select) {
+  @media (hover: hover) and (pointer: fine) {
+    .inquiry-select,
+    .inquiry-select::picker(select) { appearance: base-select; }
+
+    .inquiry-select::picker-icon { display: none; }
+
+    .inquiry-select::picker(select) {
+      margin-block-start: 0.25rem;
+      padding: 0.25rem;
+      border: 1px solid var(--surface-border);
+      border-radius: 0.5rem;
+      background: var(--surface);
+      box-shadow: 0 8px 24px rgb(18 35 68 / 0.14);
+    }
+
+    .inquiry-select option {
+      padding: 0.4rem 0.75rem;
+      border-radius: 0.25rem;
+
+      &:hover, &:focus-visible { background: var(--background); }
+      &:focus-visible { outline-width: 2px; outline-offset: -2px; }
+      &:checked { color: var(--primary-lighter); font-weight: 700; }
+    }
+  }
+}

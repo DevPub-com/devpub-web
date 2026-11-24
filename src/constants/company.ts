@@ -5,9 +5,9 @@ export const COMPANY = {
   representative: "정민영",
   privacyOfficer: "정민영",
   businessRegistrationNumber: "265-48-00972",
-  mailOrderRegistrationNumber: "제 202X-서울OO-0000호",
+  mailOrderRegistrationNumber: "제2026-진건퇴계원-209호",
   address: "경기도 남양주시 퇴계원로 117, 3층 301-S127호(염광빌딩)",
-  email: "devpub.dev@gmail.com",
+  email: "support@devpub.co.kr",
   website: "https://devpub.co.kr",
   foundedYear: 2026,
   description:
