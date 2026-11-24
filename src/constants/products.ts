@@ -7,7 +7,7 @@ export const PRODUCTS = [
   {
     name: "끼니핏",
     description: "음식 사진으로 먹은 양과 영양을 기록하는 앱",
-    url: null as string | null,
+    url: "https://kkinifit.com/" as string | null,
     features: [
       {
         image: camera,
